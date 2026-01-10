@@ -1,0 +1,74 @@
+# Node.js dependencies
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Logs
+logs
+*.log
+*.dmp
+*.stackdump
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker files
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS & temporary files
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+*.bak
+
+# Build output
+dist/
+build/
+out/
+
+# Coverage & test
+coverage/
+.nyc_output/
+jest-coverage/
+
+# Cache files
+.cache/
+npm-cache/
+.eslintcache
+.parcel-cache/
+.next/
+tmp/
+temp/
+
+# Microservice root-level directories that shouldn't be copied
+docker/
+scripts/
+
+# Monorepo-specific exclusions
+**/node_modules
+**/.env
+**/dist
+**/build
+**/coverage
+
+# Folders used for documentation or debugging
+docs/
+design/
