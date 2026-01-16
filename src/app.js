@@ -4,49 +4,52 @@ import express from "express";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 import applyRoutes from "./routes/index.js";
 
-
 const app = express();
-app.use(cookieParser());
+
+/*********** Global Middleware ***********/
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 
-
-/*********** CORS  Middleware Here ***********/
+/*********** CORS Middleware ***********/
 const allowedOrigins = [
     process.env.FRONTEND_URL,
     "http://localhost:3000",
-];
+].filter(Boolean);
+
 app.use(
     cors({
-        origin: function (origin, callback) {
-            if (!origin) return callback(null, true); // allow non-browser requests
+        origin: (origin, callback) => {
+            if (!origin) return callback(null, true);
+
             if (allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                callback(new Error("Not allowed by CORS"));
+                return callback(null, true);
             }
+
+            return callback(null, false);
         },
         credentials: true,
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
     })
 );
 
-
-
-
+/*********** Routes ***********/
 applyRoutes(app);
 
-
-// health check
+/*********** Health Check ***********/
 app.get("/", (req, res) => {
     res.status(200).json({
         status: "OK",
-        service: "api-getway",
+        service: "api-gateway",
         uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
     });
 });
 
-
-app.use(errorHandler);
+/*********** Error Handling ***********/
 app.use(notFound);
+app.use(errorHandler);
 
 export default app;
