@@ -14,26 +14,29 @@ app.use(cookieParser());
 
 /*********** CORS Middleware ***********/
 const allowedOrigins = [
-    process.env.FRONTEND_URL,
-    "http://localhost:3000",
+  process.env.FRONTEND_URL,
+  "http://localhost:3000",
 ].filter(Boolean);
 
 app.use(
-    cors({
-        origin: (origin, callback) => {
-            if (!origin) return callback(null, true);
+  cors({
+    origin: (origin, callback) => {
+      // allow server-to-server / curl / postman
+      if (!origin) return callback(null, true);
 
-            if (allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            }
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
 
-            return callback(null, false);
-        },
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-    })
+      // IMPORTANT: throw error instead of false
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
 );
+
 
 /*********** Routes ***********/
 applyRoutes(app);
